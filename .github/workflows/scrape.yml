@@ -1,0 +1,22 @@
+name: CNR Scraper
+
+on:
+  workflow_dispatch:
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        region: [NA, EU, SEA]
+        stat: [net_worth, total_minutes, kdr]
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+      - run: pip install requests
+      - run: python worker.py
+        env:
+          REGION: ${{ matrix.region }}
+          STAT: ${{ matrix.stat }}
